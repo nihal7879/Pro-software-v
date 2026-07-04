@@ -27,40 +27,48 @@ export function RateRevisionFormView({ doc }: { doc: RateRevision }) {
         <FormField label="Store" value={doc.store} />
         <FormField label="Chargeable Flag" value={doc.chargeFlag} />
         <FormField label="Prepared By" value={doc.preparedBy} />
+        <FormField label="Prepared Department" value="Purchase Department" />
       </div>
 
       <div>
         <p className="mb-1.5 text-xs font-semibold">Item Details</p>
-        <div className="overflow-hidden rounded-md border border-border">
+        <div className="overflow-x-auto rounded-md border border-border">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Code</TableHead>
-                <TableHead>Item</TableHead>
-                <TableHead>Existing</TableHead>
-                <TableHead>Negotiated</TableHead>
-                <TableHead>GST%</TableHead>
-                <TableHead>Diff %</TableHead>
-                <TableHead>Exist. MRP</TableHead>
-                <TableHead>Rev. MRP</TableHead>
-                <TableHead>Annual Cons.</TableHead>
+                <TableHead>Item Code</TableHead>
+                <TableHead>Item Name</TableHead>
+                <TableHead>Existing Rate</TableHead>
+                <TableHead>Quoted Rate</TableHead>
+                <TableHead>Revised Cost Price</TableHead>
+                <TableHead>Difference Rate(%)</TableHead>
+                <TableHead>Existing MRP</TableHead>
+                <TableHead>Revised MRP</TableHead>
+                <TableHead>Difference MRP(%)</TableHead>
+                <TableHead>Last Rate Revised on</TableHead>
+                <TableHead>Annual Consumption</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {doc.lines.map((l, i) => {
-                const d = diffPct(l.existingRate, l.revisedCostPrice)
+                const dRate = diffPct(l.existingRate, l.revisedCostPrice)
+                const dMrp = diffPct(l.existingMrp, l.revisedMrp)
                 return (
-                  <TableRow key={i}>
+                  <TableRow key={i} className="whitespace-nowrap">
                     <TableCell className="font-mono text-xs">{l.itemCode}</TableCell>
                     <TableCell className="max-w-[180px] font-medium">{l.itemName}</TableCell>
                     <TableCell>{l.existingRate.toFixed(2)}</TableCell>
-                    <TableCell className="font-semibold">{l.negotiatedRate.toFixed(2)}</TableCell>
-                    <TableCell>{l.gst.toFixed(2)}</TableCell>
+                    <TableCell>{l.quotedRate.toFixed(2)}</TableCell>
+                    <TableCell className="font-semibold">{l.revisedCostPrice.toFixed(2)}</TableCell>
                     <TableCell>
-                      <Badge variant={d > 0 ? 'warning' : 'success'}>{d.toFixed(2)}%</Badge>
+                      <Badge variant={dRate > 0 ? 'warning' : 'success'}>{dRate.toFixed(2)}%</Badge>
                     </TableCell>
                     <TableCell>{l.existingMrp.toFixed(2)}</TableCell>
                     <TableCell>{l.revisedMrp.toFixed(2)}</TableCell>
+                    <TableCell>
+                      <Badge variant={dMrp > 0 ? 'warning' : 'success'}>{dMrp.toFixed(2)}%</Badge>
+                    </TableCell>
+                    <TableCell>{l.lastRevisedOn ? formatDate(l.lastRevisedOn) : '—'}</TableCell>
                     <TableCell>{l.annualConsumption}</TableCell>
                   </TableRow>
                 )
@@ -71,7 +79,17 @@ export function RateRevisionFormView({ doc }: { doc: RateRevision }) {
       </div>
 
       <FormField label="Reason" value={doc.reason} />
-      {doc.remark && <FormField label="Remark" value={doc.remark} />}
+      <FormField label="Remark" value={doc.remark} />
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">HOD Remark</p>
+          <p>{doc.remarks.find((r) => r.role === 'hod')?.remark || '—'}</p>
+        </div>
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">CEO Remark</p>
+          <p>{doc.remarks.find((r) => r.role === 'ceo')?.remark || '—'}</p>
+        </div>
+      </div>
 
       <div className="flex flex-wrap items-end gap-8 pt-2">
         {doc.preparedSignature && (

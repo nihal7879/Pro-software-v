@@ -34,7 +34,16 @@ export function FileUpload({ value, onChange, accept = '.pdf,.xls,.xlsx,.doc,.do
           <a href={value.url} target="_blank" rel="noreferrer" className="max-w-[140px] truncate hover:underline">
             {value.name}
           </a>
-          <button type="button" onClick={() => onChange(null)} className="text-muted-foreground hover:text-destructive">
+          {/* Replace with a different file */}
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            className="text-muted-foreground hover:text-primary"
+            title="Replace file"
+          >
+            <Paperclip className="h-3.5 w-3.5" />
+          </button>
+          <button type="button" onClick={() => onChange(null)} className="text-muted-foreground hover:text-destructive" title="Remove file">
             <X className="h-3.5 w-3.5" />
           </button>
         </div>

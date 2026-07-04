@@ -27,29 +27,31 @@ export function NewMaterialFormView({ doc }: { doc: NewMaterialRequest }) {
 
       <div>
         <p className="mb-1.5 text-xs font-semibold">Item Details</p>
-        <div className="overflow-hidden rounded-md border border-border">
+        <div className="overflow-x-auto rounded-md border border-border">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Item Name</TableHead>
                 <TableHead>Unit</TableHead>
-                <TableHead>Pack</TableHead>
-                <TableHead>Brand</TableHead>
+                <TableHead>Pack Size</TableHead>
+                <TableHead>Manufacturer/Brand Name</TableHead>
                 <TableHead>Qty</TableHead>
-                <TableHead>Quote</TableHead>
-                <TableHead>Negotiated</TableHead>
+                <TableHead>Consumption</TableHead>
+                <TableHead>Quote Rate</TableHead>
+                <TableHead>Negotiated Rate</TableHead>
                 <TableHead>MRP</TableHead>
-                <TableHead>GST%</TableHead>
+                <TableHead>GST</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {doc.lines.map((l, i) => (
-                <TableRow key={i}>
+                <TableRow key={i} className="whitespace-nowrap">
                   <TableCell className="max-w-[220px] font-medium">{l.itemName}</TableCell>
                   <TableCell>{l.unit}</TableCell>
                   <TableCell>{l.packSize}</TableCell>
                   <TableCell>{l.brand}</TableCell>
                   <TableCell>{l.qty}</TableCell>
+                  <TableCell>{l.consumption || '—'}</TableCell>
                   <TableCell>{l.quoteRate.toFixed(2)}</TableCell>
                   <TableCell className="font-semibold">{l.negotiatedRate.toFixed(2)}</TableCell>
                   <TableCell>{l.mrp.toFixed(2)}</TableCell>

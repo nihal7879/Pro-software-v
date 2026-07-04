@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { usePagination, TablePagination } from '@/components/common/TablePagination'
 import { useQuotationStore } from '@/store/quotationStore'
 import type { Quotation, QuotationItem, SupplierQuote } from '@/types'
 import { formatDate } from '@/lib/utils'
@@ -51,6 +52,8 @@ export function QuotationListPage() {
     )
   }, [quotations, search])
 
+  const pg = usePagination(rows, 10)
+
   return (
     <div>
       <PageHeader
@@ -89,7 +92,7 @@ export function QuotationListPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {rows.map((r, idx) => (
+                {pg.pageData.map((r, idx) => (
                   <TableRow key={`${r.q.id}-${r.itemIndex}-${idx}`} className="whitespace-nowrap">
                     <TableCell>{r.firstOfQuotation ? r.q.store : ''}</TableCell>
                     <TableCell className="font-mono text-xs">{r.firstOfQuotation ? r.q.quoNo : ''}</TableCell>
@@ -142,6 +145,7 @@ export function QuotationListPage() {
               </TableBody>
             </Table>
           </div>
+          {rows.length > 0 && <TablePagination api={pg} />}
         </CardContent>
       </Card>
     </div>

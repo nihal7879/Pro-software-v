@@ -167,17 +167,19 @@ export function QuotationCreatePage() {
                   <TableBody>
                     {it.suppliers.map((sp, s) => (
                       <TableRow key={s}>
-                        <TableCell>
+                        <TableCell className="align-top">
                           <Combobox options={supplierOptions} value={sp.supplierCode} onChange={(c) => setSupplier(i, s, { supplierCode: c })} placeholder="Search supplier" allowCustom />
                           {sp.supplierCode && <p className="mt-1 font-mono text-[11px] text-muted-foreground">{sp.supplierCode}</p>}
                         </TableCell>
-                        <TableCell>
-                          <Input type="number" step="0.01" className="h-8 w-24" value={sp.rate || ''} onChange={(e) => setSupplier(i, s, { rate: Number(e.target.value) })} />
+                        <TableCell className="align-top">
+                          <Input type="number" step="0.01" className="h-9 w-24" value={sp.rate || ''} onChange={(e) => setSupplier(i, s, { rate: Number(e.target.value) })} />
                         </TableCell>
-                        <TableCell>
-                          <FileUpload value={sp.document} onChange={(f) => setSupplier(i, s, { document: f })} />
+                        <TableCell className="align-top">
+                          <div className="flex h-9 items-center">
+                            <FileUpload value={sp.document} onChange={(f) => setSupplier(i, s, { document: f })} />
+                          </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="align-top">
                           <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive" onClick={() => removeSupplier(i, s)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>

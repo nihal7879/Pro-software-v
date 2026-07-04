@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { StatusBadge } from '@/components/common/StatusBadge'
+import { usePagination, TablePagination } from '@/components/common/TablePagination'
 import { useComparisonStore } from '@/store/comparisonStore'
 import { vendorName } from '@/data/mockData'
 import { formatDate } from '@/lib/utils'
@@ -13,6 +14,7 @@ import { formatDate } from '@/lib/utils'
 export function ComparisonListPage() {
   const navigate = useNavigate()
   const comparisons = useComparisonStore((s) => s.comparisons)
+  const pg = usePagination(comparisons, 10)
 
   return (
     <div>
@@ -41,7 +43,7 @@ export function ComparisonListPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {comparisons.map((c) => (
+              {pg.pageData.map((c) => (
                 <TableRow key={c.id}>
                   <TableCell className="font-medium">{c.store}</TableCell>
                   <TableCell className="font-mono text-xs">{c.compNo}</TableCell>
@@ -64,6 +66,7 @@ export function ComparisonListPage() {
               ))}
             </TableBody>
           </Table>
+          {comparisons.length > 0 && <TablePagination api={pg} />}
         </CardContent>
       </Card>
     </div>
