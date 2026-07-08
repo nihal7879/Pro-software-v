@@ -23,11 +23,12 @@ interface DraftSupplier {
 interface DraftItem {
   itemCode: string
   itemName: string
+  alternateItem: string
   suppliers: DraftSupplier[]
 }
 
 const emptySupplier = (): DraftSupplier => ({ supplierCode: '', rate: 0, document: null })
-const emptyItem = (): DraftItem => ({ itemCode: '', itemName: '', suppliers: [emptySupplier()] })
+const emptyItem = (): DraftItem => ({ itemCode: '', itemName: '', alternateItem: '', suppliers: [emptySupplier()] })
 
 export function QuotationCreatePage() {
   const navigate = useNavigate()
@@ -46,6 +47,7 @@ export function QuotationCreatePage() {
       ? existing.items.map((it) => ({
           itemCode: it.itemCode,
           itemName: it.itemName,
+          alternateItem: it.alternateItem ?? '',
           suppliers: it.suppliers.map((sp) => ({ supplierCode: sp.supplierCode, rate: sp.rate, document: sp.document })),
         }))
       : [emptyItem()],
@@ -54,6 +56,10 @@ export function QuotationCreatePage() {
 
   const itemOptions: ComboOption[] = useMemo(
     () => items.map((i) => ({ value: i.code, label: i.name, hint: i.code })),
+    [],
+  )
+  const altItemOptions: ComboOption[] = useMemo(
+    () => items.map((i) => ({ value: i.name, label: i.name, hint: i.code })),
     [],
   )
   const supplierOptions: ComboOption[] = useMemo(
@@ -114,7 +120,7 @@ export function QuotationCreatePage() {
             negotiatedDocument: prior?.negotiatedDocument ?? null,
           }
         })
-      if (suppliers.length) outItems.push({ itemCode: it.itemCode, itemName: it.itemName, suppliers })
+      if (suppliers.length) outItems.push({ itemCode: it.itemCode, itemName: it.itemName, alternateItem: it.alternateItem, suppliers })
     }
     if (!outItems.length) return setError('Add at least one item with a supplier.')
     setError('')
@@ -142,9 +148,15 @@ export function QuotationCreatePage() {
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent text-accent-foreground">
                   <Package className="h-4 w-4" />
                 </span>
-                <div className="w-full max-w-md">
-                  <Label>Item {i + 1}</Label>
-                  <Combobox options={itemOptions} value={it.itemCode} onChange={(c) => pickItem(i, c)} placeholder="Search or add item" allowCustom />
+                <div className="grid w-full max-w-2xl grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div>
+                    <Label>Item {i + 1}</Label>
+                    <Combobox options={itemOptions} value={it.itemCode} onChange={(c) => pickItem(i, c)} placeholder="Search or add item" allowCustom />
+                  </div>
+                  <div>
+                    <Label>Alternate Item</Label>
+                    <Combobox options={altItemOptions} value={it.alternateItem} onChange={(name) => setItem(i, { alternateItem: name })} placeholder="Alternate (optional)" allowCustom />
+                  </div>
                 </div>
               </div>
               {draftItems.length > 1 && (

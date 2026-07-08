@@ -20,6 +20,7 @@ const chargeFlags = ['Chargeable', 'Non Chargeable', 'Charges in Package'] as co
 
 interface DraftLine {
   itemName: string
+  alternateItem: string
   unit: string
   packSize: number
   brand: string
@@ -32,7 +33,7 @@ interface DraftLine {
 }
 
 const emptyLine: DraftLine = {
-  itemName: '', unit: 'pc', packSize: 1, brand: '', qty: 1, consumption: '',
+  itemName: '', alternateItem: '', unit: 'pc', packSize: 1, brand: '', qty: 1, consumption: '',
   quoteRate: 0, negotiatedRate: 0, mrp: 0, gst: 5,
 }
 
@@ -100,7 +101,7 @@ export function NewMaterialCreatePage() {
     setError('')
 
     const outLines: NewMaterialLine[] = validLines.map((l) => ({
-      itemName: l.itemName, unit: l.unit, packSize: l.packSize, brand: l.brand, qty: l.qty,
+      itemName: l.itemName, alternateItem: l.alternateItem, unit: l.unit, packSize: l.packSize, brand: l.brand, qty: l.qty,
       consumption: l.consumption, quoteRate: l.quoteRate, negotiatedRate: l.negotiatedRate, mrp: l.mrp, gst: l.gst,
     }))
 
@@ -170,6 +171,7 @@ export function NewMaterialCreatePage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="min-w-[200px]">Item Name</TableHead>
+                    <TableHead className="min-w-[200px]">Alternate Item</TableHead>
                     <TableHead>Unit</TableHead>
                     <TableHead>Pack Size</TableHead>
                     <TableHead>Brand</TableHead>
@@ -187,6 +189,9 @@ export function NewMaterialCreatePage() {
                     <TableRow key={i}>
                       <TableCell>
                         <Combobox options={itemOptions} value={l.itemName} onChange={(name) => pickItem(i, name)} placeholder="Search or add item" allowCustom />
+                      </TableCell>
+                      <TableCell>
+                        <Combobox options={itemOptions} value={l.alternateItem} onChange={(name) => setLine(i, { alternateItem: name })} placeholder="Alternate (optional)" allowCustom />
                       </TableCell>
                       <TableCell><Input className="h-8 w-16" value={l.unit} onChange={(e) => setLine(i, { unit: e.target.value })} /></TableCell>
                       <TableCell><Num value={l.packSize} onChange={(v) => setLine(i, { packSize: v })} w="w-16" /></TableCell>

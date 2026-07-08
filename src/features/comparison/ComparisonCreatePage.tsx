@@ -17,6 +17,7 @@ import type { ComparisonRow } from '@/types'
 
 interface DraftRow {
   itemName: string
+  alternateItem: string
   mrp: number
   remark: string
   rates: Record<string, number>
@@ -61,7 +62,7 @@ export function ComparisonCreatePage() {
 
   const addItem = (name: string) => {
     if (name && !rows.some((r) => r.itemName === name)) {
-      setRows((prev) => [...prev, { itemName: name, mrp: 0, remark: '', rates: {} }])
+      setRows((prev) => [...prev, { itemName: name, alternateItem: '', mrp: 0, remark: '', rates: {} }])
     }
     setItemPick('')
   }
@@ -83,6 +84,7 @@ export function ComparisonCreatePage() {
 
     const compRows: ComparisonRow[] = rows.map((r) => ({
       itemName: r.itemName,
+      alternateItem: r.alternateItem,
       cells: supplierIds.map((sid) => ({
         supplierId: sid,
         rate: r.rates[sid] ?? 0,
@@ -175,6 +177,7 @@ export function ComparisonCreatePage() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="min-w-[180px]">Item Name</TableHead>
+                  <TableHead className="min-w-[160px]">Alternate Item</TableHead>
                   {supplierIds.map((sid) => (
                     <TableHead key={sid} className="whitespace-nowrap">{vendorName(sid)} (Rate)</TableHead>
                   ))}
@@ -187,6 +190,15 @@ export function ComparisonCreatePage() {
                 {rows.map((r) => (
                   <TableRow key={r.itemName}>
                     <TableCell className="font-medium">{r.itemName}</TableCell>
+                    <TableCell>
+                      <Combobox
+                        options={itemOptions}
+                        value={r.alternateItem}
+                        onChange={(name) => setRowField(r.itemName, { alternateItem: name })}
+                        placeholder="Alternate (optional)"
+                        allowCustom
+                      />
+                    </TableCell>
                     {supplierIds.map((sid) => (
                       <TableCell key={sid}>
                         <Input

@@ -102,6 +102,11 @@ export function QuotationNegotiatePage() {
           <p className="text-sm text-muted-foreground">
             {quotation.quoNo} · <span className="font-mono">{item.itemCode}</span> · {quotation.store} · {formatDate(quotation.quotDate)}
           </p>
+          {item.alternateItem && (
+            <p className="text-sm text-muted-foreground">
+              Alternate Item: <span className="font-medium text-foreground">{item.alternateItem}</span>
+            </p>
+          )}
         </div>
       </div>
 

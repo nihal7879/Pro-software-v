@@ -32,6 +32,7 @@ export function NewMaterialFormView({ doc }: { doc: NewMaterialRequest }) {
             <TableHeader>
               <TableRow>
                 <TableHead>Item Name</TableHead>
+                <TableHead>Alternate Item</TableHead>
                 <TableHead>Unit</TableHead>
                 <TableHead>Pack Size</TableHead>
                 <TableHead>Manufacturer/Brand Name</TableHead>
@@ -47,6 +48,7 @@ export function NewMaterialFormView({ doc }: { doc: NewMaterialRequest }) {
               {doc.lines.map((l, i) => (
                 <TableRow key={i} className="whitespace-nowrap">
                   <TableCell className="max-w-[220px] font-medium">{l.itemName}</TableCell>
+                  <TableCell className="max-w-[220px] text-muted-foreground">{l.alternateItem || '—'}</TableCell>
                   <TableCell>{l.unit}</TableCell>
                   <TableCell>{l.packSize}</TableCell>
                   <TableCell>{l.brand}</TableCell>

@@ -65,6 +65,8 @@ export interface SupplierQuote {
 export interface QuotationItem {
   itemCode: string
   itemName: string
+  /** Optional alternate/substitute item (from the item list) offered in place of the requested one. */
+  alternateItem?: string
   suppliers: SupplierQuote[]
 }
 
@@ -120,6 +122,8 @@ export interface AlternateItem {
 
 export interface NewMaterialLine {
   itemName: string
+  /** Optional alternate/substitute item (from the item list) offered in place of the requested one. */
+  alternateItem?: string
   unit: string
   packSize: number
   brand: string
@@ -193,6 +197,8 @@ export interface ComparisonCell {
 
 export interface ComparisonRow {
   itemName: string
+  /** Optional alternate/substitute item (from the item list) offered in place of the requested one. */
+  alternateItem?: string
   cells: ComparisonCell[]
 }
 

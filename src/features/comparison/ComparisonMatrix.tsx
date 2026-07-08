@@ -18,6 +18,7 @@ export function ComparisonMatrix({ comp }: { comp: Comparison }) {
         <TableHeader>
           <TableRow>
             <TableHead className="min-w-[180px]">Item Name</TableHead>
+            <TableHead className="min-w-[160px]">Alternate Item</TableHead>
             {comp.supplierIds.map((sid) => (
               <TableHead
                 key={sid}
@@ -33,6 +34,7 @@ export function ComparisonMatrix({ comp }: { comp: Comparison }) {
           {comp.rows.map((row, i) => (
             <TableRow key={i}>
               <TableCell className="font-medium">{row.itemName}</TableCell>
+              <TableCell className="text-muted-foreground">{row.alternateItem || '—'}</TableCell>
               {comp.supplierIds.map((sid) => {
                 const rate = rateFor(row, sid)
                 const isSelected = sid === comp.selectedSupplierId
